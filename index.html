@@ -79,7 +79,7 @@
             arvore = this.physics.add.staticImage((larguraJogo / 2) + 225, alturaJogo - 125, 'arvore'); // Adiciona o segundo objeto de colisão (árvore)
             this.physics.add.collider(alien, arvore);
 
-            //Adicionando moeda
+            //Adicionando as moeda na lista (array)
             moedas[0] = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
             moedas[0].setCollideWorldBounds(true);
             moedas[0].setBounce(.7);
@@ -88,12 +88,19 @@
             moedas[1].setCollideWorldBounds(true);
             moedas[1].setBounce(.7);
 
+            moedas[2] = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
+            moedas[2].setCollideWorldBounds(true);
+            moedas[2].setBounce(.7);
+
+            //adição de colisão das moedas em relação a plataforma
             this.physics.add.collider(moedas[0], plataforma);
             this.physics.add.collider(moedas[1], plataforma);
+            this.physics.add.collider(moedas[2], plataforma);
 
+            //adição de colisão das moedas em relação a arvore
             this.physics.add.collider(moedas[0], arvore);
             this.physics.add.collider(moedas[1], arvore);
-
+            this.physics.add.collider(moedas[2], arvore);
 
             // adiciona o placar placar 
             placar = this.add.text(50, 50, 'Moedas:' + pontuacao, {
@@ -101,52 +108,62 @@
                 fill: '#495613'
             });
 
-            // quando alien encontrar a moeda
+            // quando alien encontrar a primeira moeda do array
             this.physics.add.overlap(alien, moedas[0], function() {
                 moedas[0].setVisible(false); // moeda fica ínvisivel
-                var posicaoMoedaY = Phaser.Math.RND.between(50, 650); //sorteia um número
-                moedas[0].setPosition(posicaoMoedaY, 100); // posiciona a moeda
+                var posicaoMoeda1Y = Phaser.Math.RND.between(50, 650); //sorteia um número
+                moedas[0].setPosition(posicaoMoeda1Y, 100); // posiciona a moeda
                 pontuacao += 1; // soma a pontuação
                 placar.setText("Moedas: " + pontuacao); // atualiza o placar
                 moedas[0].setVisible(true); // ativa a vizualização da moeda
             });
-            //evento ao encontrar a segunda moeda
+
+            //evento ao encontrar a segunda moeda do array
             this.physics.add.overlap(alien, moedas[1], function() {
                 moedas[1].setVisible(false); // moeda fica ínvisivel
-                var posicaoMoedaY = Phaser.Math.RND.between(50, 650); //sorteia um número
-                moedas[1].setPosition(posicaoMoedaY, 100); // posiciona a moeda
+                var posicaoMoeda2Y = Phaser.Math.RND.between(50, 650); //sorteia um número
+                moedas[1].setPosition(posicaoMoeda2Y, 100); // posiciona a moeda
                 pontuacao += 1; // soma a pontuação
                 placar.setText("Moedas: " + pontuacao); // atualiza o placar
                 moedas[1].setVisible(true); // ativa a vizualização da moeda
             });
+
+            //evento ao encontrar a terceira moeda do array
+            this.physics.add.overlap(alien, moedas[2], function() {
+                moedas[2].setVisible(false); // moeda fica ínvisivel
+                var posicaoMoeda3Y = Phaser.Math.RND.between(50, 650); //sorteia um número
+                moedas[2].setPosition(posicaoMoeda3Y, 100); // posiciona a moeda
+                pontuacao += 1; // soma a pontuação
+                placar.setText("Moedas: " + pontuacao); // atualiza o placar
+                moedas[2].setVisible(true); // ativa a vizualização da moeda
+            });
         }
 
         function update() {
-            if (teclado.left.isDown) {
-                alien.setVelocityX(-150);
-            } else if (teclado.right.isDown) {
-                alien.setVelocityX(150);
+            if (teclado.left.isDown) { //Verifica se a key left está pressionada
+                alien.setVelocityX(-150); //definição da velocidade do alien no eixo x
+            } else if (teclado.right.isDown) { //verifica se a key right está pressionada
+                alien.setVelocityX(150); //definição da velocidade do alien no eixo x
             } else {
-                alien.setVelocityX(0);
+                alien.setVelocityX(0); //definição da velocidade do alien no eixo x para 0
             }
 
-            if (teclado.up.isDown) {
-                alien.setVelocityY(-150);
-                ativarTurbo();
+            if (teclado.up.isDown) { // Verifica se a key up está pressionada
+                alien.setVelocityY(-150); // defini a velocidade negativa para que o alien possa subir em relação ao eixo y
+                ativarTurbo(); //chamada da função ativarTurbo
             } else {
-                semTurbo();
+                semTurbo(); // chamada da função semTurbo
             }
 
-            fogo.setPosition(alien.x, alien.y + alien.height / 2);
-
+            fogo.setPosition(alien.x, alien.y + alien.height / 2); // defini a posição do turbo em relação ao alien
         }
 
         function ativarTurbo() {
-            fogo.setVisible(true);
+            fogo.setVisible(true); // deixa o turbo visivel
         }
 
         function semTurbo() {
-            fogo.setVisible(false);
+            fogo.setVisible(false); // deixa o tubo invisivel
         }
     </script>
 </body>
